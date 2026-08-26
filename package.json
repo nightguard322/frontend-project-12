@@ -22,6 +22,8 @@
   "type": "module",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4",
-    "oxlint": "^1.79.0"
+    "@tanstack/react-query": "^5.102.3",
+    "oxlint": "^1.79.0",
+    "zustand": "^5.0.15"
   }
 }
