@@ -1,8 +1,14 @@
-import { Button, Checkbox, Group, TextInput } from '@mantine/core';
+import { Button, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useAuthStore } from '../useAuthStore';
+import useLogin from '../../../hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+    const navigate = useNavigate()
+    const loginMutation = useLogin()
+    const setCredentials = useAuthStore((state) => state.setCredentials)
+
     const form = useForm({
             mode: 'uncontrolled',
             onSubmitPreventDefault: 'always',
@@ -19,8 +25,17 @@ export const Login = () => {
 
     const handleSubmit = (userData) => {
         //отправить get к серверу, получить ответ и выдать ошибку или редирект на корень
-        const { login } = useAuthStore()
-        login(userData)
+        loginMutation.mutate(userData, {
+            onSuccess: (data) => {
+                setCredentials(data.token, data.user)
+                navigate('/')
+            },
+            onError: (error) => {
+                console.log(error)
+            }
+        })
+        const { setCredentials } = useAuthStore()
+
     }
 
     return (
