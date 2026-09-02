@@ -1,6 +1,6 @@
 import { Button, Group, TextInput } from '@mantie/core';
 import { useForm } from '@mantie/form'
-import useRegister from '../../chat/hooks/useRegister';
+import { useRegister } from '../../chat/hooks/useRegister';
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../useAuthStore';
 
