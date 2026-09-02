@@ -4,9 +4,9 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 export default useChatStore = create()(
     persist(
         (set) => ({
-            channels: [],
+            channels: [], // [{1, 'name'}]
             activeChannelId: null,
-            messagesByChannel: {},
+            messagesByChannel: {}, //{1: {1, 'test_message'}}
 
             setActiveChannel: (id) => set({ activeChannelId: id }),
             addChannel: (channelId, name) => set((state) => {

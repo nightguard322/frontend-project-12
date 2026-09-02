@@ -1,7 +1,7 @@
 import { Button, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useAuthStore } from '../useAuthStore';
-import useLogin from '../../../hooks/useLogin';
+import useLogin from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -31,7 +31,8 @@ export const Login = () => {
                 navigate('/')
             },
             onError: (error) => {
-                console.log(error)
+                const message = error.response?.data?.message | 'Неверный логин или пароль'
+                form.setFieldError(password, message)
             }
         })
         const { setCredentials } = useAuthStore()
