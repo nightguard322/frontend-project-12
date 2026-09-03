@@ -5,7 +5,7 @@ import getRoutes from '/src/config/api'
 export const useRegister = () => {
     return useMutation({
         mutationFn: async (formData) => {
-            const { data } = axios.post(getRoutes('/api/v1/signup'), formData)
+            const { data } = await axios.post(getRoutes('addUser'), formData)
             return data
         }
     })

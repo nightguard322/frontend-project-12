@@ -13,7 +13,7 @@ export default function LoginPage() {
             mode: 'uncontrolled',
             onSubmitPreventDefault: 'always',
             initialValues: {
-            name: '',
+            email: '',
             password: '',
         },
 
@@ -32,7 +32,8 @@ export default function LoginPage() {
             },
             onError: (error) => {
                 const message = error.response?.data?.message | 'Неверный логин или пароль'
-                form.setFieldError(password, message)
+                form.setFieldError('password', message)
+                console.log(error)
             }
         })
 

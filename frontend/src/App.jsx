@@ -7,7 +7,7 @@ import Login from './features/auth/Components/Login.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import NotFound from './routes/NotFound.jsx'
 import MainPage from './pages/MainPage.jsx'
-import { MantineProvider } from '@mantine/core';
+import { RegisterPage } from './features/auth/Components/RegisterPage.jsx';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
             }>
             </Route>
           <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={ <RegisterPage/> }></Route>
           <Route path='*' element={<NotFound/>}/>
         </Routes>
       </BrowserRouter>
