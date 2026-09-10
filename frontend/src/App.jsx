@@ -1,30 +1,43 @@
 import {
-  BrowserRouter,
-  Routes,
-  Route,
+  createBrowserRouter,
+  RouterProvider,
 } from 'react-router-dom';
 import Login from './features/auth/Components/Login.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import NotFound from './routes/NotFound.jsx'
-import MainPage from './pages/MainPage.jsx'
+import MainPage from './pages/Layout.jsx'
 import { RegisterPage } from './features/auth/Components/RegisterPage.jsx';
+import Layout from './pages/Layout.jsx';
 
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element:  <Layout/>,
+      children: [
+        { 
+          index: true, element: ( 
+          <ProtectedRoute>
+            <MainPage/>
+          </ProtectedRoute>)
+        },
+        {
+          path: '/login',
+          element: <Login/>
+        },
+        {
+          path: '/register',
+          element: <RegisterPage/>
+        },
+        {
+          path: "*",
+          element: <NotFound />
+        }
+      ]
+    },
+    
+  ])
 function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
-            <Route path='/' element={
-              <ProtectedRoute>
-                <MainPage/>
-              </ProtectedRoute>
-            }>
-            </Route>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={ <RegisterPage/> }></Route>
-          <Route path='*' element={<NotFound/>}/>
-        </Routes>
-      </BrowserRouter>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App

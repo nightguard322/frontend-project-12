@@ -1,4 +1,4 @@
-import { Button, Group, TextInput } from '@mantine/core';
+import { Center, Paper, Title, Button, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form'
 import { useRegister } from '../../chat/hooks/useRegister';
 import { useNavigate } from 'react-router-dom'
@@ -25,7 +25,7 @@ export const RegisterPage = () => {
                 : 'Invalid name'
             ),
             password: (value) => (
-                /\d/.test(value) && value.length > 7 
+                /^[a-zA-Z0-9]+$/.test(value)
                 ? null 
                 : 'Invalid password'
             ),
@@ -45,7 +45,7 @@ export const RegisterPage = () => {
             },
             onError: (error) => {
                 const message = error.response?.data?.message || 'Что то пошло не так'
-                form.setFieldError(submitPass, message)
+                form.setFieldError('confirmPass', message)
             }
         }
 
@@ -53,34 +53,36 @@ export const RegisterPage = () => {
     }
 
     return (
-        <div>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-            <TextInput
-                withAsterisk
-                label="username"
-                placeholder="username"
-                key={form.key('username')}
-                {...form.getInputProps('username')}
-            />
-            <TextInput
-                withAsterisk
-                label="password"
-                placeholder="qwerty12345"
-                key={form.key('password')}
-                {...form.getInputProps('password')}
-            />
-            <TextInput
-                withAsterisk
-                label="confirmPass"
-                placeholder="qwerty12345"
-                key={form.key('confirmPass')}
-                {...form.getInputProps('confirmPass')}
-            />
-            <Group justify="flex-end" mt="md">
-                <Button type="submit">Submit</Button>
-            </Group>
-        </form>
-                    <pre>{JSON.stringify(form.errors, null, 2)}</pre>
-        </div>
+        <Center style={{ minHeight: '100vh' }}> 
+            <Paper shadow="md" p="xl" radius="md" withBorder style={{ maxWidth: 400, width: '100%' }}>
+                <Title order={2} align="center" mb="md">Вход в систему</Title>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <TextInput
+                        withAsterisk
+                        label="username"
+                        placeholder="username"
+                        key={form.key('username')}
+                        {...form.getInputProps('username')}
+                    />
+                    <TextInput
+                        withAsterisk
+                        label="password"
+                        placeholder="qwerty12345"
+                        key={form.key('password')}
+                        {...form.getInputProps('password')}
+                    />
+                    <TextInput
+                        withAsterisk
+                        label="confirmPass"
+                        placeholder="qwerty12345"
+                        key={form.key('confirmPass')}
+                        {...form.getInputProps('confirmPass')}
+                    />
+                    <Group justify="flex-end" mt="md">
+                        <Button type="submit">Submit</Button>
+                    </Group>
+                </form>
+            </Paper>
+        </Center>
     )
 }

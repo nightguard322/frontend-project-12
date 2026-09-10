@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './Header';
-import Footer from './Footer';
+import { Footer } from './Footer';
 import { Outlet } from 'react-router-dom'
 
 export default () => {

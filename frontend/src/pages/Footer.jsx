@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default () => {
+export const Footer = () => {
     return (
         <></>
     )
