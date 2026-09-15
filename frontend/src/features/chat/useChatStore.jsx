@@ -1,7 +1,7 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-export default useChatStore = create()(
+export const useChatStore = create()(
     persist(
         (set) => ({
             channels: [], // [{1, 'name'}]

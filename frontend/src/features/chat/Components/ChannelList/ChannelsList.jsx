@@ -1,16 +1,54 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { ChannelItem } from './ChannelItem'
+import { useChatStore } from '../../useChatStore'
+import { Box, Text, TextInput, ActionIcon, Button, Group, List, Menu } from '@mantine/core';
+import { IconPlus, IconChevronDown } from '@tabler/icons-react';
 
-export default ChannelsList = () => {
+export const ChannelsList = () => {
+    const channels = [{id: 1, name: 'test'}, {id: 2, name: 'test2'}]
+    const setActiveId = useChatStore((state) => state.setActiveChannel)
+    const activeId = useChatStore((state) => state.activeChannelId)
     return (
-        <div classList="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-            <a href="/" classList="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <span classList="fs-4">Каналы</span>
-            </a>
-            <ul classList="nav nav-pills flex-column mb-auto">
-                { channels.map(c => {
-                    return <ChannelIem key={c.id} name={c.name} id={c.id}/>
-                })}
-            </ul>
-  </div>
+        <Box style={{
+            padding: '16px',
+        }}>
+            <Group justify='space-between'>
+                <Text>Каналы</Text>
+                <ActionIcon variant="outline" aria-label="Settings">
+                    <IconPlus size={12} />
+                </ActionIcon>
+            </Group>
+            <List>
+                {
+                channels.map((c) => (
+                    <List.Item
+                        key={c.id}
+                        onClick={setActiveId(c.id)}
+                        style={{
+                            cursor: 'pointer',
+                            backgroundColor: activeId === c.id ? '#e7f5ff' : 'transparent'
+                        }}
+                    >
+                        <Group justify='space-between'>
+                            <Text>{ c.name }</Text>
+                            <Menu>
+                                <Menu.Target>
+                                    <ActionIcon
+                                        variant='subtle'
+                                        onClick={(e) => e.stopPropagation()}>
+                                            <IconChevronDown/>
+                                    </ActionIcon>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                    <Menu.Item>Удалить</Menu.Item>
+                                    <Menu.Item>Переименовать</Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                        </Group>
+                    </List.Item>
+                ))
+                }
+            </List>
+        </Box>
     )
 }

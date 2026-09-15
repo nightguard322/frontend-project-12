@@ -1,4 +1,4 @@
 
-export default ChannelItem = ({id, name}) => {
+export const ChannelItem = ({id, name}) => {
     
 }
