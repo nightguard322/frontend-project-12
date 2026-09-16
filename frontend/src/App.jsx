@@ -8,6 +8,7 @@ import NotFound from './routes/NotFound.jsx'
 import { MainPage } from '../src/features/chat/Components/MainPage.jsx'
 import { RegisterPage } from './features/auth/Components/RegisterPage.jsx';
 import Layout from './pages/Layout.jsx';
+import TestBug from './features/testBug.jsx';
 
   const router = createBrowserRouter([
     {

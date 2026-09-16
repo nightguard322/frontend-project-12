@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-export const useChatStore = create()(
+export const useChatStore = create(
     persist(
         (set) => ({
             channels: [], // [{1, 'name'}]
@@ -9,10 +9,10 @@ export const useChatStore = create()(
             messagesByChannel: {}, //{1: {1, 'test_message'}}
 
             setActiveChannel: (id) => set({ activeChannelId: id }),
-            addChannel: (channelId, name) => set((state) => {
+            addChannel: (channelId, name) => set((state) => ({
                 channels: [...state.channels, { channelId, name }]
-            }),
-            addMessage: (channelId, msg) => set((state) => {
+            })),
+            addMessage: (channelId, msg) => set((state) => ({
                  messagesByChannel: ({
                     ...state.messagesByChannel,
                     [channelId]: [
@@ -20,7 +20,7 @@ export const useChatStore = create()(
                         msg
                     ]
                 })
-            })
+            }))
         }),
         {
             name: 'chat-storage',
