@@ -2,7 +2,7 @@ import { TextInput, Group, Button } from '@mantine/core';
 import { Modal } from '@mantine/core';
 import { useForm } from '@mantine/form'
 import { useChatStore } from '../useChatStore';
-import { useAddChannel } from '../hooks/useAddChannel';
+import { useAddChannel } from '../hooks/useChannelHooks';
 
 export const AddChatModal = ({ opened, onClose }) => {
     const addChannel = useChatStore((state) => state.addChannel)
@@ -27,7 +27,6 @@ export const AddChatModal = ({ opened, onClose }) => {
         addChannelMutation.mutate(cData, {
             onSuccess: (response) => {
                 addChannel(response)
-                console.log('sucess adding channel')
                 onClose()
             },
             onError: (error) => {

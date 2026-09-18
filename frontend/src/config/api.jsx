@@ -12,6 +12,5 @@ const ENDPOINTS = {
 
 export default (routeName, ...args) => {
     const routeFn = ENDPOINTS[routeName]
-    console.log('route fn', routeFn, 'name', routeName)
     return routeFn(...args)
 }
