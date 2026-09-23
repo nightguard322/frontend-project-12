@@ -6,34 +6,47 @@ import { IconPlus, IconChevronDown } from '@tabler/icons-react';
 import { useAddChannel, useRemoveChannel, useUpdateChannel } from '../../hooks/useChannelHooks';
 import { useDisclosure } from '@mantine/hooks';
 import { ChatModal } from '../ChatModal';
+import { useState } from 'react';
 
 export const ChannelsList = () => {
     const channels = useChatStore((state) => state.channels)
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
     const activeId = useChatStore((state) => state.activeChannelId)
 
-    const createMutation = useAddChannel();
-    const updateMutation = useUpdateChannel();
-    const deleteMutation = useRemoveChannel();
+    const createMutation = useAddChannel;
+    const updateMutation = useUpdateChannel;
+    const deleteMutation = useRemoveChannel;
     
     const addLocal = useChatStore((state) => state.addChannel);
     const updateLocal = useChatStore((state) => state.updateChannel);
     const removeLocal = useChatStore((state) => state.removeChannel);
 
     const actions = {
-        create: { mutation: createMutation, action: addLocal },
-        update:   { mutation: updateMutation, action: updateLocal },
-        delete: { mutation: deleteMutation, action: removeLocal },
+        create: { mutationFn: createMutation, action: addLocal },
+        update:   { mutationFn: updateMutation, action: updateLocal },
+        delete: { mutationFn: deleteMutation, action: removeLocal },
     };
 
     const [opened, { open, close }] = useDisclosure(false);
+    const [modalState, setModalState] = useState({
+        mode: null,
+        channelId: null,
+        channelTitle: null
+    })
+
+    const prepareModal = (mode, id=null) => {
+        setModalState({
+            mode,
+            channelId: id,
+            initialTitle: channels[id]?.name || null
+        })
+        open()
+    }
 
     const handleSubmit = (data, mode) => {
-        console.log('data before handle submit', data, mode)
-        const { action, mutation } = actions[mode];
-        mutation.mutate(data, {
+        const { action, mutationFn } = actions[mode]; //create - channel data, update - channel data + id, дата это ид или данные формы
+        mutationFn.mutate(data, {
             onSuccess: (response) => {
-                console.log('res', response)
                 action(response)
                 close()
             },
@@ -52,18 +65,10 @@ export const ChannelsList = () => {
                 <Box p="md">
                     <Group justify="space-between">
                         <Text>Каналы</Text>
-                        <ActionIcon variant="outline" onClick={open}>
+                        <ActionIcon variant="outline" onClick={() => prepareModal('create')}>
                         <IconPlus size={16} />
                         </ActionIcon>
                     </Group>
-                    <ChatModal 
-                        opened={opened}
-                        onClose={close}
-                        handleSubmit={handleSubmit}
-                        mode='create'
-                    >
-                        <Button onClick={close}>Закрыть</Button>
-                    </ChatModal>
                 </Box>
             </Group>
             <Stack gap={0}>
@@ -88,14 +93,25 @@ export const ChannelsList = () => {
                                     </ActionIcon>
                                 </Menu.Target>
                                 <Menu.Dropdown>
-                                    <Menu.Item onClick={() => handleSubmit(c.id, 'delete')}>Удалить</Menu.Item>
-                                    <Menu.Item onClick={() => handleSubmit(c.id, 'update')}>Переименовать</Menu.Item>
+                                    <Menu.Item onClick={() => prepareModal('delete', c.id)}>Удалить</Menu.Item>
+                                    <Menu.Item onClick={() => prepareModal('update', c.id)}>Переименовать</Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>
                     </Box>)
                 })
+                
                 }
+                <ChatModal 
+                    opened={opened}
+                    onClose={close}
+                    handleSubmit={handleSubmit}
+                    mode={modalState.mode}
+                    channelId={modalState.channelId}
+                    initialTitle={ modalState.channelTitle }
+                >
+                <Button onClick={close}>Закрыть</Button>
+                </ChatModal>
             </Stack>
         </Box>
     )

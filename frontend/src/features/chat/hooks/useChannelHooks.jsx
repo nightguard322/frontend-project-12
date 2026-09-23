@@ -7,8 +7,7 @@ export const useAddChannel = () => {
     const token = useAuthStore((state) => state.token)
     console.log('starting add mutation')
     return useMutation({
-        mutationFn: async (cData) => {
-            console.log('data to add', cData)
+        mutationFn: async ({cData}) => {
             const { data } = await axios.post(
                 getRoutes('addChannel'), 
                 cData, 
@@ -28,7 +27,7 @@ export const useRemoveChannel = () => {
     const token = useAuthStore((state) => state.token)
 
     return useMutation({
-        mutationFn: async (id) => {
+        mutationFn: async ({id}) => {
             const { data } = await axios.delete(
                 getRoutes('removeChannel', id),
                 {
@@ -46,7 +45,7 @@ export const useUpdateChannel = () => {
     const token = useAuthStore((state) => state.token)
 
     return useMutation({
-        mutationFn: async (id, cData) => {
+        mutationFn: async ({id, cData}) => {
             const { data } = await axios.patch(
                 getRoutes('updateChannel', id),
                 cData,

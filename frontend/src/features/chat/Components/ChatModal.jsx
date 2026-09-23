@@ -6,7 +6,8 @@ export const ChatModal = ({
     onClose,
     mode,
     handleSubmit,
-    cData = {}
+    channelId = null,
+    channelTitle,
     }) => {
 
     const isDeleteMode = mode === 'delete'
@@ -23,21 +24,31 @@ export const ChatModal = ({
             <Box>
                 Уверены?
                 <Group justify="flex-end" mt="md">
-                    <Button onClick={onClose}>Отмена</Button>
+                    <Button onClick={
+                        (e) => {
+                            e.preventDefault()
+                            handleSubmit({id: channelId}, mode)
+                        }}>
+                    Отмена</Button>
                     <Button type="submit">Отправить</Button>
                 </Group>
             </Box>
             :
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                const title = e.currentTarget.title.value
-                handleSubmit({title}, mode)}}>
+            <form onSubmit={
+                (e) => {
+                    e.preventDefault()
+                    const formData = e.currentTarget.title.value
+                    console.log('внутри модалки нажали submit?')
+                    handleSubmit({cData: formData, id: channelId}, mode)
+                }
+            }
+            >
                 <TextInput
                     name="title"
                     withAsterisk
                     label="Имя канала"
                     placeholder="channel name"
-                    defaultValue={ cData.title }
+                    defaultValue={ channelTitle }
                 />
                 <Group justify="flex-end" mt="md">
                     <Button onClick={onClose}>Отмена</Button>
