@@ -24,13 +24,18 @@ export const ChatModal = ({
             <Box>
                 Уверены?
                 <Group justify="flex-end" mt="md">
-                    <Button onClick={
-                        (e) => {
-                            e.preventDefault()
-                            handleSubmit({id: channelId}, mode)
-                        }}>
+                    <Button onClick={onClose}>
                     Отмена</Button>
-                    <Button type="submit">Отправить</Button>
+                    <Button 
+                        type="submit" 
+                        onClick={
+                            (e) => {
+                                e.preventDefault()
+                                handleSubmit({id: channelId}, mode)
+                            }}
+                    >
+                    Отправить
+                    </Button>
                 </Group>
             </Box>
             :
@@ -38,8 +43,7 @@ export const ChatModal = ({
                 (e) => {
                     e.preventDefault()
                     const formData = e.currentTarget.title.value
-                    console.log('внутри модалки нажали submit?')
-                    handleSubmit({cData: formData, id: channelId}, mode)
+                    handleSubmit({cData: { name: formData }, id: channelId}, mode)
                 }
             }
             >

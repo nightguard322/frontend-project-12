@@ -13,18 +13,18 @@ export const ChannelsList = () => {
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
     const activeId = useChatStore((state) => state.activeChannelId)
 
-    const createMutation = useAddChannel;
-    const updateMutation = useUpdateChannel;
-    const deleteMutation = useRemoveChannel;
+    const createMutation = useAddChannel();
+    const updateMutation = useUpdateChannel();
+    const deleteMutation = useRemoveChannel();
     
     const addLocal = useChatStore((state) => state.addChannel);
     const updateLocal = useChatStore((state) => state.updateChannel);
     const removeLocal = useChatStore((state) => state.removeChannel);
 
     const actions = {
-        create: { mutationFn: createMutation, action: addLocal },
-        update:   { mutationFn: updateMutation, action: updateLocal },
-        delete: { mutationFn: deleteMutation, action: removeLocal },
+        create: { mutation: createMutation, action: addLocal },
+        update:   { mutation: updateMutation, action: updateLocal },
+        delete: { mutation: deleteMutation, action: removeLocal },
     };
 
     const [opened, { open, close }] = useDisclosure(false);
@@ -38,16 +38,18 @@ export const ChannelsList = () => {
         setModalState({
             mode,
             channelId: id,
-            initialTitle: channels[id]?.name || null
+            channelTitle: channels[id]?.name || null
         })
+        console.log('exists channel name', modalState.channelTitle)
         open()
     }
 
     const handleSubmit = (data, mode) => {
-        const { action, mutationFn } = actions[mode]; //create - channel data, update - channel data + id, дата это ид или данные формы
-        mutationFn.mutate(data, {
+        const { action, mutation } = actions[mode];
+        mutation.mutate(data, {
             onSuccess: (response) => {
-                action(response)
+                console.log('success response', response)
+                updateLocal(response)
                 close()
             },
             onError: (err => {
@@ -83,7 +85,7 @@ export const ChannelsList = () => {
                         }}
                     >
                         <Group justify='space-between'>
-                            <Text>{ c.title }</Text>
+                            <Text>{ c.name }</Text>
                             <Menu>
                                 <Menu.Target>
                                     <ActionIcon
@@ -108,7 +110,7 @@ export const ChannelsList = () => {
                     handleSubmit={handleSubmit}
                     mode={modalState.mode}
                     channelId={modalState.channelId}
-                    initialTitle={ modalState.channelTitle }
+                    channelTitle={ modalState.channelTitle }
                 >
                 <Button onClick={close}>Закрыть</Button>
                 </ChatModal>
