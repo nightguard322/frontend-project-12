@@ -3,16 +3,17 @@ import { ChannelItem } from './ChannelItem'
 import { useChatStore } from '../../useChatStore'
 import { Box, Text, ActionIcon, Group, Stack, Menu, Button, Modal } from '@mantine/core';
 import { IconPlus, IconChevronDown } from '@tabler/icons-react';
-import { useAddChannel, useRemoveChannel, useUpdateChannel } from '../../hooks/useChannelHooks';
+import { useGetChannels, useAddChannel, useRemoveChannel, useUpdateChannel } from '../../hooks/useChannelHooks';
 import { useDisclosure } from '@mantine/hooks';
 import { ChatModal } from '../ChatModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const ChannelsList = () => {
     const channels = useChatStore((state) => state.channels)
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
-    const activeId = useChatStore((state) => state.activeChannelId)
+    const activeId = useChatStore((state) => state.activeId)
 
+    const getChannels = useGetChannels()
     const createMutation = useAddChannel();
     const updateMutation = useUpdateChannel();
     const deleteMutation = useRemoveChannel();
@@ -23,7 +24,7 @@ export const ChannelsList = () => {
 
     const actions = {
         create: { mutation: createMutation, action: addLocal },
-        update:   { mutation: updateMutation, action: updateLocal },
+        update: { mutation: updateMutation, action: updateLocal },
         delete: { mutation: deleteMutation, action: removeLocal },
     };
 
@@ -34,13 +35,16 @@ export const ChannelsList = () => {
         channelTitle: null
     })
 
+    useEffect(() => {
+        const channelsList = 
+    })
+
     const prepareModal = (mode, id=null) => {
         setModalState({
             mode,
             channelId: id,
             channelTitle: channels[id]?.name || null
         })
-        console.log('exists channel name', modalState.channelTitle)
         open()
     }
 
@@ -48,8 +52,7 @@ export const ChannelsList = () => {
         const { action, mutation } = actions[mode];
         mutation.mutate(data, {
             onSuccess: (response) => {
-                console.log('success response', response)
-                updateLocal(response)
+                action(response)
                 close()
             },
             onError: (err => {
@@ -81,7 +84,7 @@ export const ChannelsList = () => {
                         onClick={() => setActiveChannel(c.id)}
                         style={{
                             cursor: 'pointer',
-                            backgroundColor: activeId === c.id ? '#e7f5ff' : 'transparent'
+                            backgroundColor: c.id === activeId ? 'lightgray' : 'transparent'
                         }}
                     >
                         <Group justify='space-between'>

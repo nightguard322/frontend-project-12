@@ -3,11 +3,27 @@ import axios from 'axios'
 import getRoutes from '../../../config/api'
 import { useAuthStore } from "../../auth/useAuthStore";
 
+export const useGetChannels = () => {
+    const token = useAuthStore((state) => state.token)
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axios.get(
+                getRoutes('getChannels'),
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
+            return data
+        }
+    })
+}
+
 export const useAddChannel = () => {
     const token = useAuthStore((state) => state.token)
     return useMutation({
         mutationFn: async ({cData}) => {
-            console.log('data to create', cData)
             const { data } = await axios.post(
                 getRoutes('addChannel'), 
                 cData, 

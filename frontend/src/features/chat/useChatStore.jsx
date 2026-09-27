@@ -22,10 +22,10 @@ export const useChatStore = create(
                     activeId: state.activeId === id ? null: state.activeId
                 }
             }),
-            updateChannel: (id, data) => set(state => ({
+            updateChannel: ({id, name}) => set(state => ({
                 channels: {
                     ...state.channels,
-                    [id]: {...state.channels[id], data}
+                    [id]: { ...state.channels[id], name}
                 }
             })),
             addMessage: (id, msg) => set((state) => ({
