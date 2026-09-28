@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import io from 'socket.io-client'
 
 export const useChatStore = create(
     persist(
-        (set) => ({
+        (get, set) => ({
             channels: {}, // [{1, 'name'}]
+            socket: null,
             activeId: null,
             messagesByChannel: {}, //{1: {1, 'test_message'}}
 
@@ -28,7 +30,7 @@ export const useChatStore = create(
                     [id]: { ...state.channels[id], name}
                 }
             })),
-            addMessage: (id, msg) => set((state) => ({
+            addMessage: ({id, msg}) => set((state) => ({
                  messagesByChannel: ({
                     ...state.messagesByChannel,
                     [id]: [
@@ -37,6 +39,21 @@ export const useChatStore = create(
                     ]
                 })
             })),
+            initSocket: () => {
+                if (get().socket) return
+
+                const socket = io('http://0.0.0.0:5001')
+                set({ socket })
+
+                socket.on('newMessage', ({channelId, body}) => get().addMessage(channelId, body));
+                socket.on('newChannel', (channel) => get().addChannel(channel))
+                socket.on('removeChannel', ({ id }) => get().removeChannel(id))
+                socket.on('renameChannel', ({ id, name }) => get().updateChannel(id,name));
+
+            },
+            emit: (event, data) => {
+                get().socket?.emit(event, data)
+            }
         }),
         {
             name: 'chat-storage',

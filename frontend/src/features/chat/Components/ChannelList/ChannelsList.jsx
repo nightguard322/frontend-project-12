@@ -35,9 +35,9 @@ export const ChannelsList = () => {
         channelTitle: null
     })
 
-    useEffect(() => {
-        const channelsList = 
-    })
+    // useEffect(() => {
+    //     const channelsList = 
+    // })
 
     const prepareModal = (mode, id=null) => {
         setModalState({
