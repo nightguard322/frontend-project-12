@@ -3,7 +3,12 @@ import { ChannelItem } from './ChannelItem'
 import { useChatStore } from '../../useChatStore'
 import { Box, Text, ActionIcon, Group, Stack, Menu, Button, Modal } from '@mantine/core';
 import { IconPlus, IconChevronDown } from '@tabler/icons-react';
-import { useGetChannels, useAddChannel, useRemoveChannel, useUpdateChannel } from '../../hooks/useChannelHooks';
+import { 
+    useGetChannels,
+    useAddChannel,
+    useRemoveChannel,
+    useUpdateChannel
+} from '../../hooks/useChannelHooks';
 import { useDisclosure } from '@mantine/hooks';
 import { ChatModal } from '../ChatModal';
 import { useState, useEffect } from 'react';
@@ -14,18 +19,18 @@ export const ChannelsList = () => {
     const activeId = useChatStore((state) => state.activeId)
 
     const getChannels = useGetChannels()
-    const createMutation = useAddChannel();
-    const updateMutation = useUpdateChannel();
-    const deleteMutation = useRemoveChannel();
+    const createChannelMutation = useAddChannel();
+    const updateChannelMutation = useUpdateChannel();
+    const deleteChannelMutation = useRemoveChannel();
     
-    const addLocal = useChatStore((state) => state.addChannel);
-    const updateLocal = useChatStore((state) => state.updateChannel);
-    const removeLocal = useChatStore((state) => state.removeChannel);
+    const addChannelLocal = useChatStore((state) => state.addChannel);
+    const updateChannelLocal = useChatStore((state) => state.updateChannel);
+    const removeChannelLocal = useChatStore((state) => state.removeChannel);
 
     const actions = {
-        create: { mutation: createMutation, action: addLocal },
-        update: { mutation: updateMutation, action: updateLocal },
-        delete: { mutation: deleteMutation, action: removeLocal },
+        createChannel: { mutation: createChannelMutation, action: addChannelLocal },
+        updateChannel: { mutation: updateChannelMutation, action: updateChannelLocal },
+        deleteChannel: { mutation: deleteChannelMutation, action: removeChannelLocal },
     };
 
     const [opened, { open, close }] = useDisclosure(false);
@@ -70,7 +75,7 @@ export const ChannelsList = () => {
                 <Box p="md">
                     <Group justify="space-between">
                         <Text>Каналы</Text>
-                        <ActionIcon variant="outline" onClick={() => prepareModal('create')}>
+                        <ActionIcon variant="outline" onClick={() => prepareModal('createChannel')}>
                         <IconPlus size={16} />
                         </ActionIcon>
                     </Group>
@@ -98,8 +103,8 @@ export const ChannelsList = () => {
                                     </ActionIcon>
                                 </Menu.Target>
                                 <Menu.Dropdown>
-                                    <Menu.Item onClick={() => prepareModal('delete', c.id)}>Удалить</Menu.Item>
-                                    <Menu.Item onClick={() => prepareModal('update', c.id)}>Переименовать</Menu.Item>
+                                    <Menu.Item onClick={() => prepareModal('deleteChannel', c.id)}>Удалить</Menu.Item>
+                                    <Menu.Item onClick={() => prepareModal('updateChannel', c.id)}>Переименовать</Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>

@@ -1,7 +1,27 @@
 import { Box, Text, TextInput, ActionIcon } from '@mantine/core';
 import { IconSend } from '@tabler/icons-react';
+import { useAddMessage } from '../../hooks/useChannelHooks';
+import { useChatStore } from '../../useChatStore'
+import { useState } from 'react';
 
 export const ChatContainer = () => {
+
+  const createMessageMutation = useAddMessage()
+  const addMessageLocal = useChatStore((state) => state.addMessage);
+  const messageList = useChatStore((state) => state.messagesByChannel)
+  const activeChannelId = useChatStore((state) => state.activeChannelId)
+  const [text, setText] = useState('');
+
+  const handleSubmit = () => {
+    createMessageMutation.mutate(text, {
+        onSuccess: (response) => {
+            addMessageLocal(response)
+        },
+        onError: (err => {
+            console.log(JSON.stringify(err))
+        })
+    })
+  }
   return (
     <Box
       style={{
@@ -39,9 +59,20 @@ export const ChatContainer = () => {
         }}
       >
         {/* Здесь будут сообщения */}
-        <Text align='left'>Сообщение 1</Text>
-        <Text align='left'>Сообщение 2</Text>
-        <Text align='left'>Сообщение 3</Text>
+        {Object.values(messageList[activeChannelId] || [])
+          .map(message => {
+            return <Box mb="xs">
+              <Text 
+                component="span" 
+                fw={700}
+              >{message.username}</Text>
+              <Text 
+                component="span" 
+                align='left'
+                key={message.id}
+              >: {message.body}</Text>
+          </Box> 
+        })}
       </Box>
 
       {/* Поле ввода */}
@@ -54,11 +85,17 @@ export const ChatContainer = () => {
       >
         <TextInput
           placeholder="Введите сообщение..."
+          value={ text }
+          onChange={(e) => setText(e.target.value)}
           rightSection={
-            <ActionIcon variant="filled">
-              <IconSend size={16} />
-            </ActionIcon>
-          }
+              <ActionIcon 
+                type="button"   // ← Обязательно!
+                variant="filled"
+                onClick={handleSubmit}
+              >
+                <IconSend size={16} />
+              </ActionIcon>
+            }
         />
       </Box>
     </Box>

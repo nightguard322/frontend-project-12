@@ -48,7 +48,7 @@ export const useRemoveChannel = () => {
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`
-                    }
+                    }   
                 }
             )
             return data
@@ -71,8 +71,24 @@ export const useUpdateChannel = () => {
                     }
                 }
             )
-            console.log(token)
-            console.log('data from response inside mutation', data)
+            return data
+        }
+    })
+}
+
+export const useAddMessage = () => {
+    const token = useAuthStore((state) => state.token)
+    return useMutation({
+        mutationFn: async ({cData}) => {
+            const { data } = await axios.post(
+                getRoutes('addMessage'), 
+                cData, 
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
             return data
         }
     })
