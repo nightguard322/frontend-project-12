@@ -79,10 +79,11 @@ export const useUpdateChannel = () => {
 export const useAddMessage = () => {
     const token = useAuthStore((state) => state.token)
     return useMutation({
-        mutationFn: async ({cData}) => {
+        mutationFn: async (message) => {
+            console.log('body to post message', message)
             const { data } = await axios.post(
                 getRoutes('addMessage'), 
-                cData, 
+                message, 
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`

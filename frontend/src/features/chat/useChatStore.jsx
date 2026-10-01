@@ -29,15 +29,18 @@ export const useChatStore = create(
                     [id]: { ...state.channels[id], name}
                 }
             })),
-            addMessage: (id, msg) => set((state) => ({
-                 messagesByChannel: ({
-                    ...state.messagesByChannel,
-                    [id]: [
-                        ...state.messagesByChannel[id] || [],
-                        msg
-                    ]
-                })
-            })),
+            addMessage: ({channelId, body, username, id}) => set((state) => {
+                const message = {id, body, username} 
+                return { 
+                        messagesByChannel: ({
+                            ...state.messagesByChannel,
+                            [channelId]: {
+                                ...state.messagesByChannel[channelId],
+                                message
+                            }
+                    })
+                }
+            }),
             initSocket: () => {
                 if (get().socket) return
 

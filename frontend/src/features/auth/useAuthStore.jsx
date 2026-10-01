@@ -5,9 +5,10 @@ export const useAuthStore = create()(
   persist(
     (set) => ({
       token: null,
-      user: null,
+      username: null,
 
       setCredentials: (token, username) => {
+        console.log('username in setCreds', username)
         set({ token, username })
       },
       

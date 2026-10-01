@@ -3,19 +3,27 @@ import { IconSend } from '@tabler/icons-react';
 import { useAddMessage } from '../../hooks/useChannelHooks';
 import { useChatStore } from '../../useChatStore'
 import { useState } from 'react';
+import { useAuthStore } from '../../../auth/useAuthStore';
+
 
 export const ChatContainer = () => {
 
   const createMessageMutation = useAddMessage()
   const addMessageLocal = useChatStore((state) => state.addMessage);
   const messageList = useChatStore((state) => state.messagesByChannel)
-  const activeChannelId = useChatStore((state) => state.activeChannelId)
+  const activeId = useChatStore((state) => state.activeId)
   const [text, setText] = useState('');
+  const username = useAuthStore((state) => state.username)
 
   const handleSubmit = () => {
-    createMessageMutation.mutate(text, {
+    console.log('usernmae',username)
+    const message = { body:text,  channelId: activeId, username}
+    createMessageMutation.mutate(message, {
         onSuccess: (response) => {
+          console.log('messages before add', messageList)
             addMessageLocal(response)
+            console.log('add message:', response)
+            console.log('messages after', messageList)
         },
         onError: (err => {
             console.log(JSON.stringify(err))
@@ -59,7 +67,7 @@ export const ChatContainer = () => {
         }}
       >
         {/* Здесь будут сообщения */}
-        {Object.values(messageList[activeChannelId] || [])
+        {Object.values(messageList[activeId] || [])
           .map(message => {
             return <Box mb="xs">
               <Text 
