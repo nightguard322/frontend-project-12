@@ -31,7 +31,7 @@ export const useChatStore = create(
             })),
             addMessage: ({channelId, body, username, id}) => set((state) => {
                 const message = {id, body, username} 
-                return { 
+                return {    
                         messagesByChannel: ({
                             ...state.messagesByChannel,
                             [channelId]: {
