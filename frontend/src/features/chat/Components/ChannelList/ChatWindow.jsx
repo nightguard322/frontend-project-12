@@ -22,6 +22,7 @@ export const ChatContainer = () => {
         onSuccess: (response) => {
           console.log('messages before add', messageList)
             addMessageLocal(response)
+            console.log('current id', activeId)
             console.log('add message:', response)
             console.log('messages after', messageList)
         },
