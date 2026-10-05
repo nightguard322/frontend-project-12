@@ -57,7 +57,13 @@ export const ChannelsList = () => {
         const { action, mutation } = actions[mode];
         mutation.mutate(data, {
             onSuccess: (response) => {
+                console.log(activeId, 'active id before action')
                 action(response)
+                console.log(activeId, 'active id after action')
+                if (activeId === null) {
+                    console.log('no active channel', response)
+                    setActiveChannel(response.id)
+                }
                 close()
             },
             onError: (err => {
@@ -119,6 +125,7 @@ export const ChannelsList = () => {
                     mode={modalState.mode}
                     channelId={modalState.channelId}
                     channelTitle={ modalState.channelTitle }
+
                 >
                 <Button onClick={close}>Закрыть</Button>
                 </ChatModal>

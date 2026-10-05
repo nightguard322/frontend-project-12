@@ -5,6 +5,7 @@ export const useChatStore = create(
     persist(
         (set, get) => ({
             channels: {}, // [{1, 'name'}]
+            channelsIds: [],
             socket: null,
             activeId: null,
             messagesByChannel: {}, //{1: {1, 'test_message'}}
@@ -14,13 +15,30 @@ export const useChatStore = create(
                 channels: {
                     ...state.channels,
                     [channel.id]: channel
-                }
+                },
+                channelsIds: [
+                    ...state.channelsIds,
+                    channel.id
+                ]
             })),
             removeChannel: ({id}) => set(state => {
+                const idIndex = state.channelsIds.indexOf(id)
+                const newOrder = state.channelsIds.filter(cId => cId !== id)
+                let nextId = state.activeId
+                if (id === state.activeId) {
+                    if (newOrder.length > 0) {
+                        nextId = newOrder[idIndex] || newOrder[idIndex - 1]
+                        console.log('next', newOrder[idIndex], 'bfeor', newOrder[idIndex - 1])
+                    } else {
+                        nextId = null
+                    }
+                }
+
+                console.log('setting active channel id', nextId)
                 const {[id]: _, ...rest} = state.channels
                 return {
                     channels: rest,
-                    activeId: state.activeId === id ? null: state.activeId
+                    activeId: nextId
                 }
             }),
             updateChannel: ({id, name}) => set(state => ({
