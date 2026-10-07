@@ -21,25 +21,34 @@ export const useChatStore = create(
                     channel.id
                 ]
             })),
-            removeChannel: ({id}) => set(state => {
-                const idIndex = state.channelsIds.indexOf(id)
-                const newOrder = state.channelsIds.filter(cId => cId !== id)
-                let nextId = state.activeId
-                if (id === state.activeId) {
+            removeChannel: ({ id }) => set((state) => {
+                const { channelsIds, activeId } = state;
+                
+                const oldIndex = channelsIds.indexOf(id);
+                
+                const newOrder = channelsIds.filter(cId => cId !== id);
+                
+                let nextId = activeId;
+
+                if (id === activeId) {
                     if (newOrder.length > 0) {
-                        nextId = newOrder[idIndex] || newOrder[idIndex - 1]
-                        console.log('next', newOrder[idIndex], 'bfeor', newOrder[idIndex - 1])
+
+                        const nextCandidate = newOrder[oldIndex]; 
+                        const prevCandidate = newOrder[oldIndex - 1];
+
+                        nextId = nextCandidate !== undefined ? nextCandidate : prevCandidate;
                     } else {
-                        nextId = null
+                        nextId = null;
                     }
                 }
 
-                console.log('setting active channel id', nextId)
-                const {[id]: _, ...rest} = state.channels
+                // 4. Удаляем канал из объекта данных
+                const { [id]: _, ...restChannels } = state.channels;
                 return {
-                    channels: rest,
+                    channels: restChannels,
+                    channelsIds: newOrder, // <--- ВАЖНО: Сохраняем обновленный список ID!
                     activeId: nextId
-                }
+                };
             }),
             updateChannel: ({id, name}) => set(state => ({
                 channels: {

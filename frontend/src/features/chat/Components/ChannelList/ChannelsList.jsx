@@ -102,15 +102,26 @@ export const ChannelsList = () => {
                             <Text>{ c.name }</Text>
                             <Menu>
                                 <Menu.Target>
-                                    <ActionIcon
-                                        variant='subtle'
-                                        onClick={(e) => e.stopPropagation()}>
-                                            <IconChevronDown/>
-                                    </ActionIcon>
+                                <ActionIcon 
+                                        variant='subtle' 
+                                        onClick={(e) => e.stopPropagation()} // Останавливаем здесь
+                                    >
+                                    <IconChevronDown/>
+                                </ActionIcon>
                                 </Menu.Target>
                                 <Menu.Dropdown>
-                                    <Menu.Item onClick={() => prepareModal('deleteChannel', c.id)}>Удалить</Menu.Item>
-                                    <Menu.Item onClick={() => prepareModal('updateChannel', c.id)}>Переименовать</Menu.Item>
+                                    <Menu.Item onClick={(e) => {
+                                        e.stopPropagation()
+                                        prepareModal('deleteChannel', c.id)
+                                    }}>
+                                    Удалить
+                                    </Menu.Item>
+                                    <Menu.Item onClick={(e) => {
+                                        e.stopPropagation()
+                                        prepareModal('updateChannel', c.id)
+                                    }}>
+                                        Переименовать
+                                    </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>
