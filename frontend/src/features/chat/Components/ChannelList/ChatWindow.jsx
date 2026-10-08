@@ -16,15 +16,10 @@ export const ChatContainer = () => {
   const username = useAuthStore((state) => state.username)
 
   const handleSubmit = () => {
-    console.log('usernmae',username)
     const message = { body:text,  channelId: activeId, username}
     createMessageMutation.mutate(message, {
         onSuccess: (response) => {
-          console.log('messages before add', messageList)
             addMessageLocal(response)
-            console.log('current id', activeId)
-            console.log('add message:', response)
-            console.log('messages after', messageList)
         },
         onError: (err => {
             console.log(JSON.stringify(err))

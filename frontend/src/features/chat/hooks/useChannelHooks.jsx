@@ -1,24 +1,18 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from 'axios'
 import getRoutes from '../../../config/api'
 import { useAuthStore } from "../../auth/useAuthStore";
 
-export const useGetChannels = () => {
+export const useGetChannels = async () => {
     const token = useAuthStore((state) => state.token)
-    return useMutation({
-        mutationFn: async () => {
-            const { data } = await axios.get(
-                getRoutes('getChannels'),
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            )
-            return data
+    const { data } = await axios.get(getRoutes('getChannels'), {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
     })
-}
+    console.log('data in query', data)
+    return data
+    }
 
 export const useAddChannel = () => {
     const token = useAuthStore((state) => state.token)

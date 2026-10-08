@@ -11,6 +11,15 @@ export const useChatStore = create(
             messagesByChannel: {}, //{1: {1, 'test_message'}}
 
             setActiveChannel: (id) => set({ activeId: id }),
+            loadChannelsList: (list) => set(() => {
+                const channels = {}
+                const channelsIds = {}
+                list.forEach(c => {
+                    channels[c.id] = c
+                    channelsIds.push(c.id)
+                })
+                return {channels, channelsIds}
+            }),
             addChannel: (channel) => set((state) => ({
                 channels: {
                     ...state.channels,
@@ -56,17 +65,18 @@ export const useChatStore = create(
                     [id]: { ...state.channels[id], name}
                 }
             })),
-            addMessage: ({channelId, body, username, id}) => set((state) => {
-                const message = {id, body, username} 
-                return {    
-                        messagesByChannel: ({
-                            ...state.messagesByChannel,
-                            [channelId]: {
-                                ...state.messagesByChannel[channelId],
-                                message
-                            }
-                    })
-                }
+            addMessage: ({ channelId, body, username, id }) => set((state) => {
+                const newMessage = { id, body, username };
+                
+                // Получаем текущий массив сообщений канала (или пустой массив, если его нет)
+                const currentMessages = state.messagesByChannel[channelId] || [];
+                
+                return {
+                    messagesByChannel: {
+                        ...state.messagesByChannel,
+                        [channelId]: [...currentMessages, newMessage]  //
+                    }
+                };
             }),
             initSocket: () => {
                 if (get().socket) return

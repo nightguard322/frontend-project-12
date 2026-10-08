@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { ChannelItem } from './ChannelItem'
+import { useQuery } from "@tanstack/react-query";
 import { useChatStore } from '../../useChatStore'
 import { Box, Text, ActionIcon, Group, Stack, Menu, Button, Modal } from '@mantine/core';
 import { IconPlus, IconChevronDown } from '@tabler/icons-react';
@@ -14,15 +14,20 @@ import { ChatModal } from '../ChatModal';
 import { useState, useEffect } from 'react';
 
 export const ChannelsList = () => {
-    const channels = useChatStore((state) => state.channels)
+    const channelsInStore = useChatStore((state) => state.channels)
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
     const activeId = useChatStore((state) => state.activeId)
 
-    const getChannels = useGetChannels()
     const createChannelMutation = useAddChannel();
     const updateChannelMutation = useUpdateChannel();
     const deleteChannelMutation = useRemoveChannel();
+    const getChannelsList = useGetChannels()
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['channels'],
+        queryFn: getChannelsList
+    });
     
+    const loadChannelsList = useChatStore((state) => state.loadChannelsList)
     const addChannelLocal = useChatStore((state) => state.addChannel);
     const updateChannelLocal = useChatStore((state) => state.updateChannel);
     const removeChannelLocal = useChatStore((state) => state.removeChannel);
@@ -40,9 +45,10 @@ export const ChannelsList = () => {
         channelTitle: null
     })
 
-    // useEffect(() => {
-    //     const channelsList = 
-    // })
+    useEffect(() => {
+        console.log(data)
+        loadChannelsList(data)
+    })
 
     const prepareModal = (mode, id=null) => {
         setModalState({
@@ -57,11 +63,8 @@ export const ChannelsList = () => {
         const { action, mutation } = actions[mode];
         mutation.mutate(data, {
             onSuccess: (response) => {
-                console.log(activeId, 'active id before action')
                 action(response)
-                console.log(activeId, 'active id after action')
                 if (activeId === null) {
-                    console.log('no active channel', response)
                     setActiveChannel(response.id)
                 }
                 close()
@@ -89,7 +92,7 @@ export const ChannelsList = () => {
             </Group>
             <Stack gap={0}>
                 {
-                Object.values(channels).map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
+                Object.values(channelsInStore).map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
                     return (<Box
                         key={c.id}
                         onClick={() => setActiveChannel(c.id)}
