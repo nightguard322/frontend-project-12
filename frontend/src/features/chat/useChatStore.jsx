@@ -13,12 +13,19 @@ export const useChatStore = create(
             setActiveChannel: (id) => set({ activeId: id }),
             loadChannelsList: (list) => set(() => {
                 const channels = {}
-                const channelsIds = {}
+                const channelsIds = []
                 list.forEach(c => {
                     channels[c.id] = c
                     channelsIds.push(c.id)
                 })
                 return {channels, channelsIds}
+            }),
+            loadMessages: (list) => set(() => { //list = []
+                const messagesByChannel = {}
+                list.forEach(m => {
+                    messagesByChannel[m.id] = m
+                })
+                return {messagesByChannel}
             }),
             addChannel: (channel) => set((state) => ({
                 channels: {

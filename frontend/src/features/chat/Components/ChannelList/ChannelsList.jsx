@@ -4,7 +4,7 @@ import { useChatStore } from '../../useChatStore'
 import { Box, Text, ActionIcon, Group, Stack, Menu, Button, Modal } from '@mantine/core';
 import { IconPlus, IconChevronDown } from '@tabler/icons-react';
 import { 
-    useGetChannels,
+    getChannels,
     useAddChannel,
     useRemoveChannel,
     useUpdateChannel
@@ -16,17 +16,18 @@ import { useState, useEffect } from 'react';
 export const ChannelsList = () => {
     const channelsInStore = useChatStore((state) => state.channels)
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
-    const activeId = useChatStore((state) => state.activeId)
+    let activeId = useChatStore((state) => state.activeId)
 
     const createChannelMutation = useAddChannel();
     const updateChannelMutation = useUpdateChannel();
     const deleteChannelMutation = useRemoveChannel();
-    const getChannelsList = useGetChannels()
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['channels'],
-        queryFn: getChannelsList
-    });
+    // const getChannelsList = useGetChannels()
     
+    const { data, isLoading, error, status } = useQuery({
+        queryKey: ['channels'],
+        queryFn: getChannels
+    });
+
     const loadChannelsList = useChatStore((state) => state.loadChannelsList)
     const addChannelLocal = useChatStore((state) => state.addChannel);
     const updateChannelLocal = useChatStore((state) => state.updateChannel);
@@ -46,15 +47,16 @@ export const ChannelsList = () => {
     })
 
     useEffect(() => {
-        console.log(data)
-        loadChannelsList(data)
-    })
+        if (data) {
+            loadChannelsList(data)
+        }
+    }, [data, loadChannelsList])
 
     const prepareModal = (mode, id=null) => {
         setModalState({
             mode,
             channelId: id,
-            channelTitle: channels[id]?.name || null
+            channelTitle: channelsInStore[id]?.name || null
         })
         open()
     }
@@ -92,7 +94,12 @@ export const ChannelsList = () => {
             </Group>
             <Stack gap={0}>
                 {
+                isLoading 
+                ?
+                <div>Загрузка...</div>
+                :
                 Object.values(channelsInStore).map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
+                    activeId = activeId === null ? c.id : activeId
                     return (<Box
                         key={c.id}
                         onClick={() => setActiveChannel(c.id)}

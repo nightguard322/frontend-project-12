@@ -4,16 +4,34 @@ import { useAddMessage } from '../../hooks/useChannelHooks';
 import { useChatStore } from '../../useChatStore'
 import { useState } from 'react';
 import { useAuthStore } from '../../../auth/useAuthStore';
-
+import { getMessages } from '../../hooks/useChannelHooks';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export const ChatContainer = () => {
 
   const createMessageMutation = useAddMessage()
+
   const addMessageLocal = useChatStore((state) => state.addMessage);
   const messageList = useChatStore((state) => state.messagesByChannel)
+  const loadMessages = useChatStore((state) => state.loadMessages)
+
   const activeId = useChatStore((state) => state.activeId)
+
   const [text, setText] = useState('');
+
   const username = useAuthStore((state) => state.username)
+
+  const { data, isLoading } = useQuery({
+    queryKey: 'messages',
+    queryFn: getMessages
+  })
+
+  useEffect(() => {
+    if (data) {
+      loadMessages(data)
+    }
+  }, [data, loadMessages])
 
   const handleSubmit = () => {
     const message = { body:text,  channelId: activeId, username}
@@ -62,8 +80,12 @@ export const ChatContainer = () => {
           align: 'left',
         }}
       >
-        {/* Здесь будут сообщения */}
-        {Object.values(messageList[activeId] || [])
+      {
+        isLoading 
+        ?
+        <div>Загрузка...</div>
+        :
+        Object.values(messageList[activeId] || [])
           .map(message => {
             return <Box mb="xs">
               <Text 
@@ -76,9 +98,8 @@ export const ChatContainer = () => {
                 key={message.id}
               >: {message.body}</Text>
           </Box> 
-        })}
-      </Box>
-
+        })
+      }
       {/* Поле ввода */}
       <Box
         style={{
