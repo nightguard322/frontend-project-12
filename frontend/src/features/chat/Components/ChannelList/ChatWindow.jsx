@@ -29,7 +29,9 @@ export const ChatContainer = () => {
 
   useEffect(() => {
     if (data) {
+      console.log('messages data', data)
       loadMessages(data)
+      console.log('messages in storage', messageList)
     }
   }, [data, loadMessages])
 
@@ -124,5 +126,6 @@ export const ChatContainer = () => {
         />
       </Box>
     </Box>
+  </Box>
   );
 }
