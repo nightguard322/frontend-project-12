@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 export const ChannelsList = () => {
     const channelsInStore = useChatStore((state) => state.channels)
     const setActiveChannel = useChatStore((state) => state.setActiveChannel)
-    let activeId = useChatStore((state) => state.activeId)
+    const activeId = useChatStore((state) => state.activeId)
 
     const createChannelMutation = useAddChannel();
     const updateChannelMutation = useUpdateChannel();
@@ -99,7 +99,7 @@ export const ChannelsList = () => {
                 <div>Загрузка...</div>
                 :
                 Object.values(channelsInStore).map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
-                    activeId = activeId === null ? c.id : activeId
+                    if (activeId === null) setActiveChannel(c.id)
                     return (<Box
                         key={c.id}
                         onClick={() => setActiveChannel(c.id)}

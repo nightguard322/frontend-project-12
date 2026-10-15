@@ -6,13 +6,14 @@ export const useAuthStore = create()(
     (set) => ({
       token: null,
       username: null,
+      isAuthenticated: false,
 
       setCredentials: (token, username) => {
-        console.log('username in setCreds', username)
         set({ token, username })
       },
       
-      logout: () => set({ token: null, username: null })
+      logout: () => set({ token: null, username: null, isAuthenticated: false}),
+      login: () => set({isAuthenticated: true})
       
     }),
     {

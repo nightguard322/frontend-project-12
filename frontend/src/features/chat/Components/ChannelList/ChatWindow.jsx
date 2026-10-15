@@ -13,25 +13,23 @@ export const ChatContainer = () => {
   const createMessageMutation = useAddMessage()
 
   const addMessageLocal = useChatStore((state) => state.addMessage);
-  const messageList = useChatStore((state) => state.messagesByChannel)
-  const loadMessages = useChatStore((state) => state.loadMessages)
-
   const activeId = useChatStore((state) => state.activeId)
+  const messagesByChannel = useChatStore((state) => state.messagesByChannel);
+  const messageList = activeId ? (messagesByChannel[activeId] || []) : []
+  const loadMessages = useChatStore((state) => state.loadMessages)
 
   const [text, setText] = useState('');
 
   const username = useAuthStore((state) => state.username)
 
   const { data, isLoading } = useQuery({
-    queryKey: 'messages',
+    queryKey: [],
     queryFn: getMessages
   })
 
   useEffect(() => {
     if (data) {
-      console.log('messages data', data)
       loadMessages(data)
-      console.log('messages in storage', messageList)
     }
   }, [data, loadMessages])
 
@@ -46,6 +44,7 @@ export const ChatContainer = () => {
         })
     })
   }
+  console.log('messages', messageList)
   return (
     <Box
       style={{
@@ -69,7 +68,7 @@ export const ChatContainer = () => {
           Название канала
         </Text>
         <Text size="xs" fw={100} align="left" c="dimmed">
-          0 сообщений
+          {messageList.length} сообщений
         </Text>
       </Box>
 
@@ -87,9 +86,12 @@ export const ChatContainer = () => {
         ?
         <div>Загрузка...</div>
         :
-        Object.values(messageList[activeId] || [])
+        Object.values(messageList)
           .map(message => {
-            return <Box mb="xs">
+            return <Box 
+              key={message.id}
+              mb="xs"
+              align='left'>
               <Text 
                 component="span" 
                 fw={700}
@@ -102,6 +104,7 @@ export const ChatContainer = () => {
           </Box> 
         })
       }
+      </Box>
       {/* Поле ввода */}
       <Box
         style={{
@@ -125,7 +128,6 @@ export const ChatContainer = () => {
             }
         />
       </Box>
-    </Box>
   </Box>
   );
 }

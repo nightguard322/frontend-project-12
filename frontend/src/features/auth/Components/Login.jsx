@@ -9,6 +9,7 @@ export default function LoginPage() {
     const loginMutation = useLogin()
     const setCredentials = useAuthStore((state) => state.setCredentials)
     const username = useAuthStore((state) => state.username)
+    const login = useAuthStore((state) => state.login)
 
     const form = useForm({
             mode: 'uncontrolled',
@@ -27,9 +28,8 @@ export default function LoginPage() {
     const handleSubmit = (userData) => {
         loginMutation.mutate(userData, {
             onSuccess: (data) => {
-                console.log(userData.username, 'username to set Creds from login page')
                 setCredentials(data.token, userData.username)
-                console.log(username, 'after set creds')
+                login()
                 navigate('/')
             },
             onError: (error) => {

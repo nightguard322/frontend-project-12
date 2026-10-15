@@ -4,9 +4,7 @@ import getRoutes from '../../../config/api'
 import { useAuthStore } from "../../auth/useAuthStore";
 
 export const getChannels = async () => {
-    console.log('function started')
-    const token = useAuthStore.getState().token; 
-    console.log('token', token)
+    const token = useAuthStore.getState().token;
     const { data } = await axios.get(getRoutes('getChannels'), {
         headers: {
           Authorization: `Bearer ${token}`

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { io } from "socket.io-client"
 
 export const useChatStore = create(
     persist(
@@ -23,9 +24,9 @@ export const useChatStore = create(
             loadMessages: (list) => set(() => { //list = []
                 const messagesByChannel = {}
                 list.forEach(m => {
-                    messagesByChannel[m.channelId] = m
+                    messagesByChannel[m.channelId] = messagesByChannel[m.channelId] ?? []
+                    messagesByChannel[m.channelId].push(m)
                 })
-                console.log('messages loaded', messagesByChannel)
                 return { messagesByChannel }
             }),
             addChannel: (channel) => set((state) => ({
@@ -36,7 +37,11 @@ export const useChatStore = create(
                 channelsIds: [
                     ...state.channelsIds,
                     channel.id
-                ]
+                ],
+                messagesByChannel: {
+                    ...state.messagesByChannel,
+                    [channel.id]: []
+                }
             })),
             removeChannel: ({ id }) => set((state) => {
                 const { channelsIds, activeId } = state;
@@ -75,10 +80,10 @@ export const useChatStore = create(
             })),
             addMessage: ({ channelId, body, username, id }) => set((state) => {
                 const newMessage = { id, body, username };
-                
-                // Получаем текущий массив сообщений канала (или пустой массив, если его нет)
                 const currentMessages = state.messagesByChannel[channelId] || [];
-                
+                if (!currentMessages || currentMessages.some(m => m.id === id)) {
+                    return state
+                }
                 return {
                     messagesByChannel: {
                         ...state.messagesByChannel,
@@ -89,13 +94,13 @@ export const useChatStore = create(
             initSocket: () => {
                 if (get().socket) return
 
-                const socket = io('http://0.0.0.0:5001')
+                const socket = io()
                 set({ socket })
 
-                socket.on('newMessage', ({channelId, body}) => get().addMessage(channelId, body));
+                socket.on('newMessage', (data) => get().addMessage(data));
                 socket.on('newChannel', (channel) => get().addChannel(channel))
-                socket.on('removeChannel', ({ id }) => get().removeChannel(id))
-                socket.on('renameChannel', ({ id, name }) => get().updateChannel(id,name));
+                socket.on('removeChannel', (id) => get().removeChannel(id))
+                socket.on('renameChannel', (channel) => get().updateChannel(channel));
 
             },
             emit: (event, data) => {
