@@ -29,20 +29,23 @@ export const useChatStore = create(
                 })
                 return { messagesByChannel }
             }),
-            addChannel: (channel) => set((state) => ({
-                channels: {
+            addChannel: (channel) => set((state) => {
+                console.log('channel data in addChanel', channel)
+                return { 
+                    channels: {
                     ...state.channels,
                     [channel.id]: channel
-                },
-                channelsIds: [
-                    ...state.channelsIds,
-                    channel.id
-                ],
-                messagesByChannel: {
-                    ...state.messagesByChannel,
-                    [channel.id]: []
+                    },
+                    channelsIds: [
+                        ...state.channelsIds,
+                        channel.id
+                    ],
+                    messagesByChannel: {
+                        ...state.messagesByChannel,
+                        [channel.id]: []
+                    }
                 }
-            })),
+            }),
             removeChannel: ({ id }) => set((state) => {
                 const { channelsIds, activeId } = state;
                 
@@ -66,10 +69,12 @@ export const useChatStore = create(
 
                 // 4. Удаляем канал из объекта данных
                 const { [id]: _, ...restChannels } = state.channels;
+                const { [id]: unactualMessages, ...restMessages } = state.messagesByChannel
                 return {
                     channels: restChannels,
-                    channelsIds: newOrder, // <--- ВАЖНО: Сохраняем обновленный список ID!
-                    activeId: nextId
+                    channelsIds: newOrder, 
+                    activeId: nextId,
+                    messagesByChannel: restMessages,
                 };
             }),
             updateChannel: ({id, name}) => set(state => ({

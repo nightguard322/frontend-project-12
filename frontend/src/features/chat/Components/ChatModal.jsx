@@ -1,5 +1,6 @@
 import { TextInput, Group, Button, Box, Text } from '@mantine/core';
 import { Modal } from '@mantine/core';
+import { useState } from 'react';
 
 export const ChatModal = ({ 
     opened,
@@ -8,14 +9,17 @@ export const ChatModal = ({
     handleSubmit,
     channelId = null,
     channelTitle,
+    isInvalid,
     }) => {
 
-    const isDeleteMode = mode === 'delete'
+    const isDeleteMode = mode === 'deleteChannel'
     const titles = {
         create: 'Добавить канал',
         update: 'Переименовать канал',
         delete: 'Удалить канал',
     }
+
+const [cname, setName] = useState('')
 
   return (
     <>
@@ -42,8 +46,8 @@ export const ChatModal = ({
             <form onSubmit={
                 (e) => {
                     e.preventDefault()
-                    const formData = e.currentTarget.title.value
-                    handleSubmit({cData: { name: formData }, id: channelId}, mode)
+                    console.log('Я получил имя для отправки', cname)
+                    handleSubmit({cData: { name: cname }, id: channelId}, mode)
                 }
             }
             >
@@ -53,10 +57,11 @@ export const ChatModal = ({
                     label="Имя канала"
                     placeholder="channel name"
                     defaultValue={ channelTitle }
+                    onChange={ (e) => setName(e.target.value) }
                 />
                 <Group justify="flex-end" mt="md">
                     <Button onClick={onClose}>Отмена</Button>
-                    <Button type="submit">Отправить</Button>
+                    <Button type="submit" disabled={isInvalid(cname)}>Отправить</Button>
                 </Group>
             </form>
         }

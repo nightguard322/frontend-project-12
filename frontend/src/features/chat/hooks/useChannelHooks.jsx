@@ -24,7 +24,7 @@ export const getMessages = async () => {
 }
 
 export const useAddChannel = () => {
-    const token = useAuthStore((state) => state.token)
+    const token = useAuthStore.getState().token; 
     return useMutation({
         mutationFn: async ({cData}) => {
             const { data } = await axios.post(
@@ -64,7 +64,6 @@ export const useUpdateChannel = () => {
 
     return useMutation({
         mutationFn: async ({id, cData}) => {
-            console.log('new data to patch', cData, 'to id', id)
             const { data } = await axios.patch(
                 `/api/v1/channels/${id}`,
                 cData,
@@ -83,7 +82,6 @@ export const useAddMessage = () => {
     const token = useAuthStore((state) => state.token)
     return useMutation({
         mutationFn: async (message) => {
-            console.log('body to post message', message)
             const { data } = await axios.post(
                 getRoutes('addMessage'), 
                 message, 

@@ -46,6 +46,7 @@ export const ChannelsList = () => {
         channelTitle: null
     })
 
+
     useEffect(() => {
         if (data) {
             loadChannelsList(data)
@@ -61,8 +62,24 @@ export const ChannelsList = () => {
         open()
     }
 
+    const isInvalid = (str) => {
+        const channelsList = Object.values(channelsInStore)
+        return (
+            channelsList.some(c => c.name === str)
+            ||
+            str === '')
+    }
+
     const handleSubmit = (data, mode) => {
         const { action, mutation } = actions[mode];
+        if (mode === 'createChannel') {
+            const cName = data.cData.name
+            if (isInvalid(cName)) {
+                console.log('invalid name in validator', cName)
+                return
+            }
+        }
+        console.log('submit pushed')
         mutation.mutate(data, {
             onSuccess: (response) => {
                 action(response)
@@ -73,6 +90,7 @@ export const ChannelsList = () => {
             },
             onError: (err => {
                 console.log(JSON.stringify(err))
+                console.log(err)
             })
         })
     }
@@ -100,6 +118,7 @@ export const ChannelsList = () => {
                 :
                 Object.values(channelsInStore).map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
                     if (activeId === null) setActiveChannel(c.id)
+                    console.log(channelsInStore[activeId])
                     return (<Box
                         key={c.id}
                         onClick={() => setActiveChannel(c.id)}
@@ -146,7 +165,7 @@ export const ChannelsList = () => {
                     mode={modalState.mode}
                     channelId={modalState.channelId}
                     channelTitle={ modalState.channelTitle }
-
+                    isInvalid={isInvalid}
                 >
                 <Button onClick={close}>Закрыть</Button>
                 </ChatModal>
