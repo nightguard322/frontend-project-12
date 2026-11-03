@@ -1,0 +1,137 @@
+import { Box, Text, TextInput, ActionIcon } from '@mantine/core';
+import { IconSend } from '@tabler/icons-react';
+import { useAddMessage } from '../../hooks/useChannelHooks';
+import { useChatStore } from '../../useChatStore'
+import { useState } from 'react';
+import { useAuthStore } from '../../../auth/useAuthStore';
+import { getMessages } from '../../hooks/useChannelHooks';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import filter from '../../utils/chatFilter.jsx'
+
+export const ChatContainer = () => {
+
+  const createMessageMutation = useAddMessage()
+
+  const addMessageLocal = useChatStore((state) => state.addMessage);
+  const activeId = useChatStore((state) => state.activeId)
+  const messagesByChannel = useChatStore((state) => state.messagesByChannel);
+  const messageList = activeId ? (messagesByChannel[activeId] || []) : []
+  const loadMessages = useChatStore((state) => state.loadMessages)
+
+  const [text, setText] = useState('');
+
+  const username = useAuthStore((state) => state.username)
+
+  const { data, isLoading } = useQuery({
+    queryKey: [],
+    queryFn: getMessages
+  })
+
+  useEffect(() => {
+    if (data) {
+      loadMessages(data)
+    }
+  }, [data, loadMessages])
+
+  const handleSubmit = () => {
+    const message = { body:text,  channelId: activeId, username}
+    createMessageMutation.mutate(message, {
+        onSuccess: (response) => {
+            addMessageLocal(response)
+        },
+        onError: (err => {
+            console.log(JSON.stringify(err))
+        })
+    })
+  }
+
+  return (
+    <Box
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh', // или любая другая высота контейнера
+        maxWidth: '800px',
+        margin: '0 auto',
+        border: '1px solid #e0e0e0',
+      }}
+    >
+      {/* Заголовок канала */}
+      <Box
+        style={{
+          padding: '16px',
+          borderBottom: '1px solid #e0e0e0',
+          backgroundColor: '#f8f9fa',
+        }}
+      >
+        <Text size="sm" fw={700} align="left">
+          Название канала
+        </Text>
+        <Text size="xs" fw={100} align="left" c="dimmed">
+          {messageList.length} сообщений
+        </Text>
+      </Box>
+
+      {/* Окно сообщений - занимает всё доступное пространство */}
+      <Box
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '16px',
+          align: 'left',
+        }}
+      >
+      {
+        isLoading 
+        ?
+        <div>Загрузка...</div>
+        :
+        Object.values(messageList)
+          .map(message => {
+            return <Box 
+              key={message.id}
+              mb="xs"
+              align='left'>
+              <Text 
+                component="span" 
+                fw={700}
+              >{message.username}</Text>
+              <Text 
+                component="span" 
+                align='left'
+                key={message.id}
+              >: {message.body}</Text>
+          </Box> 
+        })
+      }
+      </Box>
+      {/* Поле ввода */}
+      <Box
+        style={{
+          padding: '16px',
+          borderTop: '1px solid #e0e0e0',
+          backgroundColor: '#fff',
+        }}
+      >
+        <TextInput
+          placeholder="Введите сообщение..."
+          value={ text }
+          onChange={(e) => {
+            const filtered = filter.clean(e.target.value)
+            setText(filtered)
+          }}
+          rightSection={
+              <ActionIcon 
+                type="button"   // ← Обязательно!
+                variant="filled"
+                onClick={handleSubmit}
+              >
+                <IconSend size={16} />
+              </ActionIcon>
+            }
+        />
+      </Box>
+  </Box>
+  );
+}
