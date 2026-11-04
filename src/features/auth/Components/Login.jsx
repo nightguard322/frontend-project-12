@@ -27,12 +27,7 @@ export default function LoginPage() {
             initialValues: {
             username: '',
             password: '',
-        },
-
-        validate: {
-            name: (value) => (/^.+$/.test(value) ? null : t('errors.login.name')),
-            password: (value) => (/^[a-zA-Z0-9]+$/.test(value) ? null : t('errors.login.password'))
-        },
+        }
     });
 
     const handleSubmit = (userData) => {
@@ -42,8 +37,8 @@ export default function LoginPage() {
                 login()
                 navigate('/')
             },
-            onError: (error) => {
-                const message = error.response?.data?.message || t('errors.login.common')
+            onError: () => {
+                const message = t('errors.login.common')
                 form.setFieldError('password', message)
             }
         })

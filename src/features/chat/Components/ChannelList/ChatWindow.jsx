@@ -8,11 +8,12 @@ import { getMessages } from '../../hooks/useChannelHooks';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import filter from '../../utils/chatFilter.jsx'
+import { useTranslation } from 'react-i18next';
 
 export const ChatContainer = () => {
 
   const createMessageMutation = useAddMessage()
-
+  const { t } = useTranslation()
   const addMessageLocal = useChatStore((state) => state.addMessage);
   const activeId = useChatStore((state) => state.activeId)
   const messagesByChannel = useChatStore((state) => state.messagesByChannel);
@@ -117,6 +118,7 @@ export const ChatContainer = () => {
         <TextInput
           placeholder="Введите сообщение..."
           value={ text }
+          aria-label={ t('chat.new') }
           onChange={(e) => {
             const filtered = filter.clean(e.target.value)
             setText(filtered)
