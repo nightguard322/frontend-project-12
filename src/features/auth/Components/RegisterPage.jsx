@@ -7,7 +7,7 @@ import {
     TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form'
-import { useRegister } from '../../chat/hooks/useRegister';
+import { useRegister } from '../hooks/useRegister';
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../useAuthStore';
 import { useTranslation } from 'react-i18next';
@@ -53,8 +53,11 @@ export const RegisterPage = () => {
                 navigate('/')
             },
             onError: (error) => {
-                const message = error.response?.data?.message || 'Что то пошло не так'
-                form.setFieldError('confirmPass', message)
+                const message = error.response?.data?.message || t('errors.server')
+                console.log(message)
+                if (message === 'Conflict') {
+                    form.setFieldError('confirmPass', t('errors.register.dublicate'))
+                }
             }
         }
 

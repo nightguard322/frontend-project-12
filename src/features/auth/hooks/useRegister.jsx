@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import getRoutes from '../../../../src/config/api.jsx'
+import getRoutes from '../../../config/api.jsx'
 
 export const useRegister = () => {
     return useMutation({
