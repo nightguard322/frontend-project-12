@@ -2,7 +2,7 @@ import debug from "debug";
 import i18next from "i18next";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { useChatStore } from "./features/chat/useChatStore.jsx";
-import { useAuthStore } from './store/authStore';
+import { useAuthStore } from './features/auth/useAuthStore.jsx';
 
 import App from "./components/App";
 import resources from "./locales/index.jsx"
