@@ -74,14 +74,14 @@ export const RegisterPage = () => {
                         {...form.getInputProps('username')}
                     />
                     <TextInput
-                        withAsterisk
+                        withAsterisk={false} 
                         label={t("common.password")}
                         placeholder="qwerty12345"
                         key={form.key('password')}
                         {...form.getInputProps('password')}
                     />
                     <TextInput
-                        withAsterisk
+                        withAsterisk={false} 
                         label={t("register.passwordConfirm")}
                         placeholder="qwerty12345"
                         key={form.key('confirmPass')}
