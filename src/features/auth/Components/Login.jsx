@@ -44,7 +44,6 @@ export default function LoginPage() {
         })
 
     }
-
     return (
             <div className='d-flex align-items-center justify-content-center'>
             <Paper shadow="md" p="xl" radius="md" withBorder style={{ maxWidth: 400, width: '100%' }}>
