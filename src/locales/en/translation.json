@@ -1,6 +1,12 @@
 {
     "common": {
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "register": "Register"
+    },
+    "register": {
+        "username": "Имя пользователя",
+        "password": "Пароль",
+        "passwordConfirm": "Подтвердите пароль"
     },
     "channelsList": {
         "create": {

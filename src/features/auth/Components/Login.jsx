@@ -1,11 +1,22 @@
-import { Paper, Title, Button, Group, TextInput } from '@mantine/core';
+import { 
+    Paper, 
+    Title, 
+    Button, 
+    Group, 
+    TextInput,
+    Anchor,
+    Text,
+    Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useAuthStore } from '../useAuthStore';
 import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const loginMutation = useLogin()
     const setCredentials = useAuthStore((state) => state.setCredentials)
     const login = useAuthStore((state) => state.login)
@@ -19,8 +30,8 @@ export default function LoginPage() {
         },
 
         validate: {
-            name: (value) => (/^.+$/.test(value) ? null : 'Invalid name'),
-            password: (value) => (/^[a-zA-Z0-9]+$/.test(value) ? null : 'Invalid password')
+            name: (value) => (/^.+$/.test(value) ? null : t('errors.login.name')),
+            password: (value) => (/^[a-zA-Z0-9]+$/.test(value) ? null : t('errors.login.password'))
         },
     });
 
@@ -32,7 +43,7 @@ export default function LoginPage() {
                 navigate('/')
             },
             onError: (error) => {
-                const message = error.response?.data?.message | 'Неверный логин или пароль'
+                const message = error.response?.data?.message || t('errors.login.common')
                 form.setFieldError('password', message)
             }
         })
@@ -46,23 +57,32 @@ export default function LoginPage() {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <TextInput
                         withAsterisk
-                        label="Username"
-                        placeholder="username"
+                        label={t('login.username')}
+                        placeholder={t('login.username')}
                         key={form.key('username')}
                         {...form.getInputProps('username')}
                     />
                     <TextInput
                         withAsterisk
-                        label="password"
+                        label={t('common.password')}
                         placeholder="qwerty12345"
                         key={form.key('password')}
                         {...form.getInputProps('password')}
                     />
 
-                    <Group justify="flex-end" mt="md">
-                        <Button type="submit">Submit</Button>
+                    <Group justify="center" mt="md">
+                        <Button type="submit">{t('login.submit')}</Button>
                     </Group>
                 </form>
+                <Divider my="md"/>
+                <Group>
+                    <Text>{t("login.question")}</Text>
+                    <Anchor
+                        href='/register'
+                    >
+                    {t("login.register")}
+                    </Anchor>
+                </Group>
             </Paper>
         </div>
     );
