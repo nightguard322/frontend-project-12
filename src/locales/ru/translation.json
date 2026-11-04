@@ -18,18 +18,21 @@
     "channelsList": {
         "create": {
             "title": "Добавить канал",
+            "label": "Имя канала",
             "message": "Канал создан"
         },
         "update": {
             "title": "Переименовать канал",
+            "label": "Имя канала",
             "message": "Канал переименован"
         },
         "delete": {
             "title": "Удалить канал",
             "message": "Канал удален",
-            "confirmationQ": "Are you sure?"
+            "confirmationQ": "Вы уверены?"
         },
-        "cancel": "Cancel"
+        "cancel": "Отменить",
+        "apply": "Отправить"
     },
     "errors": {
         "uniqueName": "Имя должно быть уникальным",

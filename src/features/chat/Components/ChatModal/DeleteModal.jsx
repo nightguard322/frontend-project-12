@@ -19,7 +19,7 @@ export const DeleteModal = ({
                 <Box>   
                     {t(`channelsList.delete.confirmationQ`)}
                     <Group justify="flex-end" mt="md">
-                    <Button onClick={onClose}>Отмена</Button>
+                    <Button variant="outline" onClick={onClose}>{t(`channelsList.cancel`)}</Button>
                     <Button 
                         type="submit"
                         autoFocus

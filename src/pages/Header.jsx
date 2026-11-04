@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ExitButton } from '../../src/features/buttons/ExitButton'
-import { RegisterButton } from '../features/buttons/RegisterButton';
 import { useAuthStore } from '../features/auth/useAuthStore';
 
 export default function Header() {

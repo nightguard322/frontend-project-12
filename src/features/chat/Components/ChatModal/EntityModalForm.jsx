@@ -35,7 +35,12 @@ export const EntityFormModal = ({
     })
   return (
     <>
-      <Modal opened={opened} onClose={onClose} title={titles[mode]} centered>
+      <Modal 
+            opened={opened}
+            onClose={onClose}
+            title={t(`channelsList.${titles[mode]}.title`)} 
+            centered
+        >
                 <form onSubmit={form.onSubmit((values) => {
                     notifications.show({
                         title: t(`channelsList.${titles[mode]}.message`),
@@ -49,12 +54,12 @@ export const EntityFormModal = ({
                 })}>
                 <TextInput
                     {...form.getInputProps('name')}
-                  label={t(`channelsList.${titles[mode]}.title`)}
+                  label={t(`channelsList.${titles[mode]}.label`)}
                   >
                 </TextInput>
                 <Group justify="flex-end" mt="md">
-                    <Button onClick={onClose}>Отмена</Button>
-                    <Button type="submit">Отправить</Button>
+                    <Button variant="outline" onClick={onClose}>{t(`channelsList.cancel`)}</Button>
+                    <Button type="submit">{t(`channelsList.apply`)}</Button>
                 </Group>
             </form>
       </Modal>

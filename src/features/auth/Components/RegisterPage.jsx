@@ -67,21 +67,18 @@ export const RegisterPage = () => {
                 <Title order={2} align="center" mb="md">{t("register.title")}</Title>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <TextInput
-                        withAsterisk
                         label={t("register.username")}
                         placeholder={t("register.username")}
                         key={form.key('username')}
                         {...form.getInputProps('username')}
                     />
                     <TextInput
-                        withAsterisk={false} 
                         label={t("common.password")}
                         placeholder="qwerty12345"
                         key={form.key('password')}
                         {...form.getInputProps('password')}
                     />
                     <TextInput
-                        withAsterisk={false} 
                         label={t("register.passwordConfirm")}
                         placeholder="qwerty12345"
                         key={form.key('confirmPass')}

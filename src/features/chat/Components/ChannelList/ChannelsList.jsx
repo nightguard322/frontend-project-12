@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useQuery } from "@tanstack/react-query";
 import { useChatStore } from '../../useChatStore'
-import { Box, Text, ActionIcon, Group, Stack, Menu, Button } from '@mantine/core';
+import { Box, Text, ActionIcon, Group, Stack, Menu, Button, UnstyledButton } from '@mantine/core';
 import { IconPlus, IconChevronDown } from '@tabler/icons-react';
 import { 
     getChannels,
@@ -96,7 +96,7 @@ export const ChannelsList = () => {
                     <Group justify="space-between">
                         <Text>{t('channelsList.create.title')}</Text>
                         <ActionIcon variant="outline" onClick={() => prepareModal('createChannel')}>
-                        <IconPlus size={16} />
+                            <IconPlus size={16} />
                         </ActionIcon>
                     </Group>
                 </Box>
@@ -109,42 +109,43 @@ export const ChannelsList = () => {
                 :
                 channelsList.map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
                     if (activeId === null) setActiveChannel(c.id)
-                    return (<Box
-                        key={c.id}
-                        onClick={() => setActiveChannel(c.id)}
-                        style={{
-                            cursor: 'pointer',
-                            backgroundColor: c.id === activeId ? 'lightgray' : 'transparent'
-                        }}
-                    >
-                        <Group justify='space-between'>
+                    return (
+                    <Group key={c.id}>
+                        <UnstyledButton
+                            onClick={() => setActiveChannel(c.id)}
+                            style={{
+                                flex: 1,
+                                cursor: 'pointer',
+                                backgroundColor: c.id === activeId ? 'lightgray' : 'transparent'
+                            }}>
                             <Text># { c.name }</Text>
-                            <Menu>
-                                <Menu.Target>
-                                <ActionIcon 
-                                        variant='subtle' 
-                                        onClick={(e) => e.stopPropagation()} // Останавливаем здесь
-                                    >
-                                    <IconChevronDown/>
-                                </ActionIcon>
-                                </Menu.Target>
-                                <Menu.Dropdown>
-                                    <Menu.Item onClick={(e) => {
-                                        e.stopPropagation()
-                                        prepareModal('deleteChannel', c.id, c.removable)
-                                    }}>
-                                    {t('channelsList.delete.title')}
-                                    </Menu.Item>
-                                    <Menu.Item onClick={(e) => {
-                                        e.stopPropagation()
-                                        prepareModal('updateChannel', c.id)
-                                    }}>
-                                        {t('channelsList.update.title')}
-                                    </Menu.Item>
-                                </Menu.Dropdown>
-                            </Menu>
-                        </Group>
-                    </Box>)
+                        </UnstyledButton>
+                        { c.removable && <Menu>
+                            <Menu.Target>
+                            <ActionIcon 
+                                    variant='subtle' 
+                                    onClick={(e) => e.stopPropagation()} // Останавливаем здесь
+                                >
+                                <IconChevronDown/>
+                            </ActionIcon>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                                <Menu.Item onClick={(e) => {
+                                    e.stopPropagation()
+                                    prepareModal('deleteChannel', c.id, c.removable)
+                                }}>
+                                {t('channelsList.delete.title')}
+                                </Menu.Item>
+                                <Menu.Item onClick={(e) => {
+                                    e.stopPropagation()
+                                    prepareModal('updateChannel', c.id)
+                                }}>
+                                    {t('channelsList.update.title')}
+                                </Menu.Item>
+                            </Menu.Dropdown>
+                        </Menu>
+                        }
+                    </Group>)
                 })
                 
                 }

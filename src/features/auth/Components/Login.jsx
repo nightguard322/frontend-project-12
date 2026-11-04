@@ -56,14 +56,12 @@ export default function LoginPage() {
                 <Title order={2} align="center" mb="md">Вход в систему</Title>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <TextInput
-                        withAsterisk
                         label={t('login.username')}
                         placeholder={t('login.username')}
                         key={form.key('username')}
                         {...form.getInputProps('username')}
                     />
                     <TextInput
-                        withAsterisk
                         label={t('common.password')}
                         placeholder="qwerty12345"
                         key={form.key('password')}
