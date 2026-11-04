@@ -5,7 +5,7 @@ import {
 import Login from './features/auth/Components/Login.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import NotFound from './routes/NotFound.jsx'
-import { MainPage } from '../src/features/chat/Components/MainPage.jsx'
+import { MainPage } from './features/chat/Components/MainPage.jsx'
 import { RegisterPage } from './features/auth/Components/RegisterPage.jsx';
 import Layout from './pages/Layout.jsx';
 
@@ -36,8 +36,8 @@ import Layout from './pages/Layout.jsx';
     },
     
   ])
-function App() {
+function Routes() {
   return <RouterProvider router={router} />
 }
 
-export default App
+export default Routes

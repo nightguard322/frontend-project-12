@@ -20,6 +20,7 @@
     "@trpc/tanstack-react-query": "^11.18.0",
     "axios": "^1.21.0",
     "bootstrap": "^5.3.8",
+    "debug": "^4.4.3",
     "i18n": "^0.15.4",
     "i18next": "^26.5.6",
     "leo-profanity": "^1.9.0",

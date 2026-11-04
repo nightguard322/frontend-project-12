@@ -1,0 +1,21 @@
+{
+    "common": {
+        "loading": "Loading..."
+    },
+    "channelsList": {
+        "create": {
+            "title": "Create channel",
+            "message": "Successfully created"
+        },
+        "update": {
+            "title": "Update channel",
+            "message": "Successfully updated"
+        },
+        "delete": {
+            "title": "Delete channel",
+            "message": "Successfully removed",
+            "confirmationQ": "Are you sure?"
+        },
+        "cancel": "Cancel"
+    }
+}
