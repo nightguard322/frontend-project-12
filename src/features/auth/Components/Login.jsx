@@ -78,7 +78,8 @@ export default function LoginPage() {
                 <Group>
                     <Text>{t("login.question")}</Text>
                     <Anchor
-                        href='/register'
+                        component={Link}
+                        to='/register'
                     >
                     {t("login.register")}
                     </Anchor>
