@@ -118,7 +118,7 @@ export const ChannelsList = () => {
                                 cursor: 'pointer',
                                 backgroundColor: c.id === activeId ? 'lightgray' : 'transparent'
                             }}>
-                            <Text># { c.name }</Text>
+                            { `# ${c.name}` }
                         </UnstyledButton>
                         { c.removable && <Menu>
                             <Menu.Target>
