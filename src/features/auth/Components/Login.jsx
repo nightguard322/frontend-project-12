@@ -73,7 +73,9 @@ export default function LoginPage() {
                         component={Link}
                         to='/register'
                     >
-                    {t("login.register")}
+                    {/* {t("login.register")}
+                     */}
+                     Регистрация
                     </Anchor>
                 </Group>
             </Paper>
