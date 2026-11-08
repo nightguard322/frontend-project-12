@@ -66,7 +66,6 @@ export const ChannelsList = () => {
         open()
     }
 
-
     const handleSubmit = (data, mode) => {
         const { action, mutation } = actions[mode];
 
