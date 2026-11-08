@@ -30,11 +30,9 @@ const init = async (socket) => {
     socket.on('renameChannel', (channel) => useChatStore.getState().updateChannel(channel));
 
   return (
-    <div data-vitest="true">
       <I18nextProvider i18n={i18n}>
         <App />
       </I18nextProvider>
-    </div>
   );
 };
 
