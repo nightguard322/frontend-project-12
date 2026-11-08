@@ -9,14 +9,14 @@ import "@mantine/notifications/styles.css";
 const queryClient = new QueryClient()
 
 const App = () => (
-  <StrictMode>
-      <MantineProvider>
-        <QueryClientProvider client={queryClient}>
-          <Notifications /> 
-          <Routes/>
-        </QueryClientProvider>
-      </MantineProvider>
-  </StrictMode>
+    <StrictMode>
+        <MantineProvider>
+          <QueryClientProvider client={queryClient}>
+            <Notifications /> 
+            <Routes/>
+          </QueryClientProvider>
+        </MantineProvider>
+    </StrictMode>
 )
 
 export default App;
