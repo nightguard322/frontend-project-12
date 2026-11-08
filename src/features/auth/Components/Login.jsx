@@ -67,17 +67,11 @@ export default function LoginPage() {
                     </Group>
                 </form>
                 <Divider my="md"/>
-                <Group>
-                    <Text>{t("login.question")}</Text>
-                    <Anchor
-                        component={Link}
-                        to='/register'
-                    >
-                    {/* {t("login.register")}
-                     */}
-                     Регистрация
+                <div>
+                    <Anchor component={Link} to="/register" aria-label="Регистрация">
+                        Регистрация
                     </Anchor>
-                </Group>
+                </div>
             </Paper>
         </div>
     );
