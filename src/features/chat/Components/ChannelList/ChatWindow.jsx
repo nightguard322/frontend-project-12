@@ -35,7 +35,8 @@ export const ChatContainer = () => {
     }
   }, [data, loadMessages])
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
     const message = { body:text,  channelId: activeId, username}
     createMessageMutation.mutate(message, {
         onSuccess: (response) => {
@@ -115,24 +116,26 @@ export const ChatContainer = () => {
           backgroundColor: '#fff',
         }}
       >
-        <TextInput
-          placeholder="Введите сообщение..."
-          value={ text }
-          aria-label={ t('chat.new') }
-          onChange={(e) => {
-            const filtered = filter.clean(e.target.value)
-            setText(filtered)
-          }}
-          rightSection={
-              <ActionIcon 
-                type="button"   // ← Обязательно!
-                variant="filled"
-                onClick={handleSubmit}
-              >
-                <IconSend size={16} />
-              </ActionIcon>
-            }
-        />
+        <form onSubmit={handleSubmit}>
+          <TextInput
+            placeholder="Введите сообщение..."
+            value={ text }
+            aria-label={ t('chat.new') }
+            onChange={(e) => {
+              const filtered = filter.clean(e.target.value)
+              setText(filtered)
+            }}
+            rightSection={
+                <ActionIcon 
+                  type="submit" 
+                  variant="filled"
+                  disabled={!text.trim()}
+                >
+                  <IconSend size={16} />
+                </ActionIcon>
+              }
+          />
+        </form>
       </Box>
   </Box>
   );
