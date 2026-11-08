@@ -34,7 +34,7 @@ export const RegisterPage = () => {
                 : t('errors.register.name')
             ),
             password: (value) => (
-                /^[a-zA-Z0-9]+$/.test(value)
+                (/^[a-zA-Z0-9]+$/.test(value) && (value.length > 6))
                 ? null 
                 : t('errors.register.password')
             ),
