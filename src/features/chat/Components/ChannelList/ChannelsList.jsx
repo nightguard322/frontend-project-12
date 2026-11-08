@@ -95,7 +95,7 @@ export const ChannelsList = () => {
                     <Group justify="space-between">
                         <Text>{t('channelsList.create.title')}</Text>
                         <ActionIcon variant="outline" onClick={() => prepareModal('createChannel')}>
-                            <IconPlus size={16} />
+                            +
                         </ActionIcon>
                     </Group>
                 </Box>
