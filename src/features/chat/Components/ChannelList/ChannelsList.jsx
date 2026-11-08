@@ -121,12 +121,13 @@ export const ChannelsList = () => {
                         </UnstyledButton>
                         { c.removable && <Menu>
                             <Menu.Target>
-                            <ActionIcon 
-                                    variant='subtle' 
-                                    onClick={(e) => e.stopPropagation()} // Останавливаем здесь
-                                >
-                                <IconChevronDown/>
-                            </ActionIcon>
+                                <ActionIcon 
+                                	    aria-label="Управление каналом"
+                                        variant='subtle' 
+                                        onClick={(e) => e.stopPropagation()} // Останавливаем здесь
+                                    >
+                                    <IconChevronDown/>
+                                </ActionIcon>
                             </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Item onClick={(e) => {
