@@ -114,7 +114,7 @@ export const useChatStore = create(
         }), 
         {
             name: 'chat-storage',
-            storage: createJSONStorage(() => sessionStorage),
+            storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 activeId: state.activeId,
                 channels: state.channels
