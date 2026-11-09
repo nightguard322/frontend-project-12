@@ -67,11 +67,9 @@ export default function LoginPage() {
                     </Group>
                 </form>
                 <Divider my="md"/>
-                <div>
                     <Anchor component={Link} to="/register" aria-label="Регистрация">
                         Регистрация
                     </Anchor>
-                </div>
             </Paper>
         </div>
     );
