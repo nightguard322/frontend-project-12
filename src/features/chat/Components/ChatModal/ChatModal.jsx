@@ -2,6 +2,7 @@ import { TextInput, Group, Button, Box } from '@mantine/core';
 import { Modal } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import filter from '../../utils/chatFilter.jsx'
 
 export const ChatModal = ({ 
     opened,
@@ -46,7 +47,8 @@ const [cname, setName] = useState('')
             <form onSubmit={
                 (e) => {
                     e.preventDefault()
-                    handleSubmit({cData: { name: cname}, id: channelId}, mode)
+                    const filteredTitle = filter.clean(cname)
+                    handleSubmit({cData: { name: filteredTitle}, id: channelId}, mode)
                 }
             }
             >
