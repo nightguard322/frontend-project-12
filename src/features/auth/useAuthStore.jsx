@@ -2,20 +2,6 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 export const useAuthStore = create()(
-  import.meta.env.MODE === 'test'
-    ? 
-    (set) => ({
-        token: null,
-        username: null,
-        isAuthenticated: false,
-
-        setCredentials: (token, username) => {
-        set({ token, username })
-      },
-        logout: () => set({ token: null, username: null, isAuthenticated: false}),
-        login: () => set({isAuthenticated: true})
-    })
-    :
   persist(
     (set) => ({
       token: null,
