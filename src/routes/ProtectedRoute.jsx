@@ -1,5 +1,7 @@
 import { useAuthStore } from "../features/auth/useAuthStore"
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from "react";
+import LoginPage from "../features/auth/Components/Login";
 
 export const ProtectedRoute = ({ children }) => {
   const token = useAuthStore((state) => state.token);
