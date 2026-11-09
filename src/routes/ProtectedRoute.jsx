@@ -1,10 +1,19 @@
 import { useAuthStore } from "../features/auth/useAuthStore"
 import { Navigate } from "react-router-dom"
 
-export default ({ children }) => {
-    const token = useAuthStore((state) => state.token)
+export const ProtectedRoute = ({ children }) => {
+  const token = useAuthStore((state) => state.token);
+  const navigate = useNavigate();
 
-    if (!token) return <Navigate to="/login"/>
+  useEffect(() => {
+    if (!token) {
+      navigate('/login', { replace: true });
+    }
+  }, [token, navigate]);
 
-    return children
-}
+  if (!token) {
+    return <LoginPage />; // синхронный рендер логина
+  }
+
+  return children;
+};

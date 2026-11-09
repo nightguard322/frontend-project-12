@@ -3,13 +3,14 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import Login from './features/auth/Components/Login.jsx'
-import ProtectedRoute from './routes/ProtectedRoute.jsx'
+import { ProtectedRoute } from './routes/ProtectedRoute.jsx'
 import NotFound from './routes/NotFound.jsx'
 import { MainPage } from './features/chat/Components/MainPage.jsx'
 import { RegisterPage } from './features/auth/Components/RegisterPage.jsx';
 import Layout from './pages/Layout.jsx';
+import { useRef } from 'react';
 
-  const router = createBrowserRouter([
+const createAppRouter = () => createBrowserRouter([
     {
       path: '/',
       element:  <Layout/>,
@@ -37,7 +38,11 @@ import Layout from './pages/Layout.jsx';
     
   ])
 function Routes() {
-  return <RouterProvider router={router} />
+  const routerRef = useRef(null);
+  if (routerRef.current === null) {
+    routerRef.current = createAppRouter();
+  }
+  return <RouterProvider router={routerRef.current} />;
 }
 
 export default Routes
