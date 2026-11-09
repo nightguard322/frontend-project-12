@@ -11,7 +11,6 @@ import filter from '../../utils/chatFilter.jsx'
 import { useTranslation } from 'react-i18next';
 
 export const ChatContainer = () => {
-
   const createMessageMutation = useAddMessage()
   const { t } = useTranslation()
   const addMessageLocal = useChatStore((state) => state.addMessage);
