@@ -107,7 +107,6 @@ export const ChannelsList = () => {
                 <div>{t('common.loading')}</div>
                 :
                 channelsList.map((c) => { //channels: {id: {id, name}}, {id2: {id2, name2}}
-                    if (activeId === null) setActiveChannel(c.id)
                     return (
                     <Group key={c.id}>
                         <UnstyledButton
