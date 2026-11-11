@@ -22,7 +22,20 @@ export const ChatModal = ({
         delete: t('channelsList.delete'),
     }
 
-const [cname, setName] = useState('')
+    const form = useForm({
+        onSubmitPreventDefault: 'always',
+        initialValues: {
+            title: '',
+        },
+        validate: {
+            title: (value) => {
+                if (!value || value.length === 0) return t('errors.register.name'); 
+                if (value.length <= 3 || value.length >= 20) return t('errors.register.name');
+                return null;
+            },
+        }
+    })
+
 
   return (
     <>
@@ -45,20 +58,15 @@ const [cname, setName] = useState('')
             </Box>
             :
             <form onSubmit={
-                (e) => {
-                    e.preventDefault()
-                    const filteredTitle = filter.clean(cname)
-                    handleSubmit({cData: { name: filteredTitle}, id: channelId}, mode)
+                form.onSubmit((values) => {
+                    const filteredTitle = filter.clean(values.title); 
+                    handleSubmit({ cData: { name: filteredTitle }, id: channelId }, mode);
                 }
-            }
-            >
+            )}>
                 <TextInput
-                    name="title"
-                    withAsterisk
                     label="Имя канала"
                     placeholder="channel name"
-                    defaultValue={ channelTitle }
-                    onChange={ (e) => setName(e.target.value) }
+                    {...form.getInputProps('title')} 
                 />
                 <Group justify="flex-end" mt="md">
                     <Button onClick={onClose}>{t('channelsList.modal.cancel')}</Button>

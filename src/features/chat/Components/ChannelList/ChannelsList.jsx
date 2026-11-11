@@ -148,17 +148,6 @@ export const ChannelsList = () => {
                 })
                 
                 }
-                {/* <ChatModal 
-                    opened={opened}
-                    onClose={close}
-                    handleSubmit={handleSubmit}
-                    mode={modalState.mode}
-                    channelId={modalState.channelId}
-                    channelTitle={ modalState.channelTitle }
-                    isRemovable={ modalState.removable }
-                >
-                <Button onClick={close}>{t('channelsList.closeButton')}</Button>
-                </ChatModal> */}
 
                 {modalState.mode === 'deleteChannel' && (
                     <DeleteModal

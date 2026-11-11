@@ -30,6 +30,9 @@ export const EntityFormModal = ({
                 if (channelsList.some(c => c.name === value)) {
                     return t('errors.uniqueName');
                 }
+                if (value.length <= 3 || value.length >= 20){
+                    return t('errors.register.name');
+                }
             }
         }
     })
