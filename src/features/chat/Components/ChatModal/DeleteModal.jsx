@@ -26,14 +26,14 @@ export const DeleteModal = ({
                         onClick={() => {
                             if (!isRemovable) {
                                 notifications.show({
-                                    title: t('errors.cannot_delete'),
+                                    message: t('errors.cannot_delete'),
                                     color: 'red',
                                 });
                                 onClose()
                                 return;
                             }
                             notifications.show({
-                                title: t('channelsList.delete.message'),
+                                message: t('channelsList.delete.message'),
                                 color: 'green',
                             });
                             handleSubmit({id: channelId, isRemovable}, mode)

@@ -10,7 +10,7 @@ const queryClient = new QueryClient()
 
 const App = () => (
     <StrictMode>
-        <MantineProvider>
+        <MantineProvider env="test">
           <QueryClientProvider client={queryClient}>
             <Notifications /> 
             <Routes/>
