@@ -3,6 +3,7 @@ import { Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { notifications } from '@mantine/notifications';
+import filter from '../../utils/chatFilter';
 
 export const EntityFormModal = ({ 
     opened,
@@ -51,7 +52,7 @@ export const EntityFormModal = ({
                     });
                     handleSubmit(
                         {
-                            cData: { name: values.name},
+                            cData: { name: filter.clean(values.name)},
                             id: channelId
                         }, mode)
                 })}>
